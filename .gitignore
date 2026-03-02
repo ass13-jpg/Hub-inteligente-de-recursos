@@ -1,0 +1,29 @@
+# Ambiente
+.env
+.env.local
+venv/
+node_modules/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+
+# Banco de dados
+*.db
+*.sqlite
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Frontend
+dist/
+.DS_Store
+
+# Logs
+*.log
