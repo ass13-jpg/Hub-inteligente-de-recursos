@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🎓 Hub Inteligente de Recursos Educacionais
 
 Sistema Fullstack para gerenciamento inteligente de materiais didáticos com IA.
@@ -42,3 +43,6 @@ cp .env.example .env
 # Adicione sua GEMINI_API_KEY
 
 uvicorn app.main:app --reload
+=======
+# Hub-inteligente-de-recursos
+>>>>>>> 369d35170385409b4df7c03213e0f29ffb0bf6a6
