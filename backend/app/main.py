@@ -1,46 +1,57 @@
+import os
+import sys
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Carregar .env da pasta backend
+env_path = Path(__file__).parent.parent / ".env"
+print(f"Carregando .env de: {env_path}")
+load_dotenv(env_path)
+
+print(f"GEMINI_API_KEY carregada: {bool(os.getenv('GEMINI_API_KEY'))}")
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.config import settings
 from app.database import init_db
 from app.routes import resources, ai, health
-import logging
 
-# Configurar logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
+# Inicializar banco de dados
+init_db()
 
-# Criar app
+# Configurar CORS
 app = FastAPI(
-    title=settings.API_TITLE,
-    version=settings.API_VERSION,
-    debug=settings.DEBUG
+    title="Hub Inteligente de Recursos Educacionais",
+    description="API para catalogação inteligente de recursos educacionais",
+    version="1.0.0"
 )
 
-# CORS
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "[]")
+if isinstance(allowed_origins, str):
+    import json
+    try:
+        allowed_origins = json.loads(allowed_origins)
+    except:
+        allowed_origins = ["http://localhost:3000", "http://localhost:5173"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Inicializar BD
-init_db()
-
-# Registrar rotas
+# Rotas
 app.include_router(health.router)
 app.include_router(resources.router)
 app.include_router(ai.router)
 
 @app.get("/")
-async def root():
+def read_root():
     return {
-        "message": "Educational Hub API",
-        "docs": "/docs",
-        "version": settings.API_VERSION
+        "message": "🎓 Hub Inteligente de Recursos Educacionais",
+        "version": "1.0.0",
+        "docs": "/docs"
     }
 
 if __name__ == "__main__":
